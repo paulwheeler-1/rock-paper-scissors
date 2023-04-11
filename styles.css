@@ -1,0 +1,9 @@
+.scores, .plays, .winner{
+    display: flex;
+    gap: 16px;
+    font-size: 25px;
+    margin: 15px;
+}
+
+
+

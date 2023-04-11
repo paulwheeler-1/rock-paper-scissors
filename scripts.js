@@ -12,7 +12,7 @@ function getComputerChoice() {
     return compChoice
 }
 
-function validPlayerChoice(playerChoice) {
+/*function validPlayerChoice(playerChoice) {
     let playervalidChoice = playerChoice.toLowerCase()
     console.log(playervalidChoice)
 
@@ -24,7 +24,7 @@ function validPlayerChoice(playerChoice) {
    // need to add error handling
 
     return playervalidChoice
-}
+}*/
 
 function playRockPaperScissors(playerSelection, computerSelection) {
     let victorymessage = ''
@@ -53,6 +53,9 @@ function playRockPaperScissors(playerSelection, computerSelection) {
 }
 
 function game() {
+
+    if (playerPoints >= 5 || computerPoints >= 5) return
+
     let wins = 0
     let vicArr = [null,null,null]
     let vicMessage = ''
@@ -60,10 +63,7 @@ function game() {
     let vicIncrement =0
     let tieBool = 0
 
-    console.log("Let's play Five Rounds of Rock Paper Sissors!")
-    for (var i = 1; i < 6; i++){
-        playerInput = prompt('Choose your Weapon')
-        playerSelection = validPlayerChoice(playerInput)
+        //playerSelection = validPlayerChoice(playerInput)
 
         //catch
         compSelection = getComputerChoice()
@@ -71,28 +71,61 @@ function game() {
 
         vicArr = playRockPaperScissors(playerSelection, compSelection)
         vicMessage = vicArr[0]
-        vicIncrement = vicArr[1]
+        playerVictoryBool = vicArr[1]
         tieBool = vicArr[2]
 
         if (tieBool == 1) {
-            i =  i-1
+            // do the things
+            console.log('tie! no points')
+            return
         }
 
-        vicTrack += vicIncrement
-        let vicComp = i - vicTrack
-        //console.log(vicIncrement + ' vicinc')
-        //console.log(vicTrack + ' victrack')
+        if (playerVictoryBool) {
+            playerPoints += playerVictoryBool
+            console.log('playerpoints ' + playerPoints)
 
+        } else if (!playerVictoryBool) {
+            computerPoints += 1
+            console.log('computerpoints ' + computerPoints)  
+        }
 
-        console.log(vicMessage)
-        console.log(('The score is ' + vicTrack + ' to ' + vicComp ))
-        console.log((5-i + ' games left!'))
-    }
+        //adjust DOM per click
+        playerScoreDisplay.textContent = `${playerPoints}`
+        computerScoreDisplay.textContent = `${computerPoints}`
+        plays.textContent = `${vicMessage}`
 
-    if (vicTrack > 2) {
-        console.log("You Win! I won't forget this >:(")
-    } else {
-        console.log("HAHA LOSER! Eat my shorts")
-    }
+        //endgame
+        if (playerPoints >= 5 || computerPoints >= 5) {
+            winner.textContent = `We have a winner! Play again soon!`
+        }
+
 }
+
+const rockbtn = document.querySelector('#rock-button')
+const paperbtn = document.querySelector('#paper-button')
+const sczbtn = document.querySelector('#scissors-button')
+const playerScoreDisplay = document.querySelector('#player-score')
+const computerScoreDisplay = document.querySelector('#computer-score')
+const plays = document.querySelector('.plays')
+const winner = document.querySelector('.winner')
+
+let playerSelection
+let playerPoints = 0
+let computerPoints = 0
+
+rockbtn.onclick = () => {
+    playerSelection = "rock"
+    game()
+}
+
+paperbtn.onclick = () => {
+    playerSelection = "paper"
+    game()
+}
+
+sczbtn.onclick = () => {
+    playerSelection = "scissors"
+    game()
+}
+
 
